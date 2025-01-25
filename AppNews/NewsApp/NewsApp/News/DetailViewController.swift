@@ -130,12 +130,9 @@ class DetailUIViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(edgeInset)
             make.bottom.equalToSuperview().inset(edgeInset)
         }
-        
-        
     }
         
     //MARK: - UICollectionViewDataSource
     
     //MARK: - UICollectionViewDelegate
-    
 }

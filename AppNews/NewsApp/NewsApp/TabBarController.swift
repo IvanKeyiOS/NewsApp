@@ -17,9 +17,6 @@ final class TabBarController: UITabBarController {
     }
     
     private func setupViewController() {
-        
-                         
-      
         viewControllers = [setupNavigationController(rootViewController: GeneralViewController(),
                                                      title: "General",
                                                      image: UIImage(systemName: "newspaper") ?? UIImage.add) ,

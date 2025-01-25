@@ -9,6 +9,7 @@ import UIKit
 
 final class TechnologyViewController: UIViewController {
     //MARK: - GUI Variables
+    
     //MARK: - Properties
     
     // MARK: - Life cycle
