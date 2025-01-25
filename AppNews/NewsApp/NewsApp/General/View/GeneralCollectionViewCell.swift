@@ -14,8 +14,8 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = UIImage(named: "image") ?? UIImage.add
-        
+        view.image = UIImage.add
+//        UIImage(named: "image") ?? 
         return view
     }()
     
