@@ -24,8 +24,8 @@ class DetailUIViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         
-        view.image = UIImage.add
-//        UIImage(named: "image") ??
+        view.image = UIImage(named: "image") ?? UIImage.add
+        
         return view
     }()
     
