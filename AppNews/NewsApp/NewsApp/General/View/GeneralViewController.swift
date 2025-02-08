@@ -9,10 +9,11 @@ import UIKit
 import SnapKit
 
 class GeneralViewController: UIViewController {
-    
     //MARK: - GUI Variables
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
+        searchBar.searchBarStyle = .minimal
+        searchBar.backgroundColor = UIColor.cream
         
         return searchBar
     }()
@@ -25,13 +26,11 @@ class GeneralViewController: UIViewController {
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
 //        layout.scrollDirection = .horizontal
-        
         let collectionView = UICollectionView(frame: CGRect(x: 0,
                                                             y: 0,
                                                             width: view.frame.width,
                                                             height: view.frame.height - searchBar.frame.height),
                                                             collectionViewLayout: layout)
-        
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -46,8 +45,6 @@ class GeneralViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         self.setupViewModel()
-        
-        
     }
     
     required init?(coder: NSCoder) {
@@ -56,13 +53,9 @@ class GeneralViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUI()
-        
     }
     //MARK: - Methods
-    
-    //MARK: - Private methods
     private func setupViewModel() {
         viewModel.reloadData = { [weak self] in
             self?.collectionView.reloadData()
@@ -71,7 +64,6 @@ class GeneralViewController: UIViewController {
         viewModel.reloadCell = { [weak self] row in
             self?.collectionView.reloadItems(at: [IndexPath(row: row,
                                                             section: 0)])
-            
         }
         
         viewModel.showError = { error in 
@@ -81,21 +73,17 @@ class GeneralViewController: UIViewController {
     }
    
     private func setupUI() {
-        
-        view.backgroundColor = .white
+        view.backgroundColor = .cream
         view.addSubview(searchBar)
         view.addSubview(collectionView)
         
         collectionView.register(GeneralCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "GeneralCollectionViewCell")
-        collectionView.backgroundColor = .white
-        searchBar.barTintColor = .white
-    
+        collectionView.backgroundColor = .cream
         setupConstraints()
     }
 
     private func setupConstraints() {
-        
         searchBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
@@ -119,20 +107,19 @@ extension GeneralViewController: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GeneralCollectionViewCell",
                                                             for: indexPath) as? GeneralCollectionViewCell else { return UICollectionViewCell() }
-        
         let article = viewModel.getArticle(for: indexPath.row)
         cell.set(article: article)
-//        print(#function)
+
         return cell
     }
 }
+
 //MARK: - UICollectionViewDelegate
 extension GeneralViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-//        let detailViewController = DetailUIViewController()
         let article = viewModel.getArticle(for: indexPath.row)
-        navigationController?.pushViewController(NewsUIViewController(viewModel: NewsViewModel(article: article)),
+        navigationController?.pushViewController(NewsViewController(viewModel: NewsViewModel(article: article)),
                                                  animated: true)
     }
 }

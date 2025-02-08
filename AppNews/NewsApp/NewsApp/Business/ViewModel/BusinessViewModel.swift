@@ -1,27 +1,27 @@
 //
-//  GeneralViewModel.swift
+//  BusinessViewModel.swift
 //  NewsApp
 //
-//  Created by Иван Курганский on 25/01/2025.
+//  Created by Иван Курганский on 07/02/2025.
 //
 
 import Foundation
 
-protocol GeneralViewModelProtocol {
+protocol BusinessViewModelProtocol {
     var reloadData: (() -> Void)? { get set}
     var showError: ((String) -> Void)? { get set }
     var reloadCell: ((Int) -> Void)? { get set }
     
     var numberOfCells: Int { get }
     
+    func loadData()
     func getArticle(for row: Int) -> ArticleCellViewModel
 }
 
-final class GeneralViewModel: GeneralViewModelProtocol {
+final class BusinessViewModel: BusinessViewModelProtocol {
     var reloadCell: ((Int) -> Void)?
     var showError: ((String) -> Void)?
     var reloadData: (() -> Void)?
-    
     
     //MARK: - Properties
     var numberOfCells: Int{
@@ -36,17 +36,14 @@ final class GeneralViewModel: GeneralViewModelProtocol {
         }
     }
     
-    init() {
-        loadData()
-    }
-    
     func getArticle(for row: Int) -> ArticleCellViewModel {
         return articles[row]
     }
     
-    private func loadData() {
+    func loadData() {
+        print(#function)
         //TODO: - load Data
-        ApiManager.getNews(from: .general) { [weak self] result in
+        ApiManager.getNews(from: .business) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let articles):
@@ -77,7 +74,7 @@ final class GeneralViewModel: GeneralViewModelProtocol {
             }
         }
     }
-
+        
     private func convertToCellViewModel(_ articles: [ArticleResponseObject]) -> [ArticleCellViewModel] {
         return articles.map { ArticleCellViewModel(article: $0) }
     }
@@ -88,6 +85,7 @@ final class GeneralViewModel: GeneralViewModelProtocol {
                                                                 description: "First object description",
                                                                 urlToImage: "...",
                                                                 date: "25.01.2025"))
+            
         ]
     }
 }

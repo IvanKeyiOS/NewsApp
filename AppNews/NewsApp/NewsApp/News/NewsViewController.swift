@@ -8,13 +8,12 @@
 import UIKit
 import SnapKit
 
-final class NewsUIViewController: UIViewController {
-    
+final class NewsViewController: UIViewController {
     //MARK: - GUI Variables
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
-        
         view.showsVerticalScrollIndicator = false
+        view.backgroundColor = .cream
         
         return view
     }()
@@ -23,28 +22,17 @@ final class NewsUIViewController: UIViewController {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        
-//        view.backgroundColor = .redBy
         view.contentMode = .scaleAspectFit
-        return view
-    }()
-    
-    private lazy var blackView: UIView = {
-        let view = UIView()
-        
-        view.backgroundColor = .black
-        view.alpha = 0.5
+        view.layer.masksToBounds = true
         
         return view
     }()
-    
+        
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        
-        
-        label.textColor = .white
+        label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         
         return label
     }()
@@ -60,8 +48,6 @@ final class NewsUIViewController: UIViewController {
 
     private lazy var dataOfPublicationLabel: UILabel = {
         let label = UILabel()
-        
-     
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15)
         
@@ -69,16 +55,13 @@ final class NewsUIViewController: UIViewController {
     }()
     
     //MARK: - Properties
-    
     private let edgeInset = 10
     private let viewModel: NewsViewModelProtocol
+    
     // MARK: - Life cycle
     init(viewModel: NewsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-//        self.setupViewModel()
-        
-        
     }
     
     required init?(coder: NSCoder) {
@@ -86,11 +69,6 @@ final class NewsUIViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .white
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.backgroundColor = .white
-        navigationController?.tabBarController?.tabBar.backgroundColor = .white
         setupUI()
     }
     //MARK: - Methods
@@ -99,13 +77,10 @@ final class NewsUIViewController: UIViewController {
     private func setupUI() {
         scrollView.addSubview(contentView)
         contentView.addSubview(imageView)
-        contentView.addSubview(blackView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(dataOfPublicationLabel)
         view.addSubview(scrollView)
-//        view.backgroundColor = .white
-//        navigationController?.navigationBar.backgroundColor = .white
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         dataOfPublicationLabel.text = viewModel.date
@@ -116,7 +91,6 @@ final class NewsUIViewController: UIViewController {
         } else {
             imageView.image = UIImage(named: "image")
         }
-    
         setupConstraints()
     }
     
@@ -128,25 +102,20 @@ final class NewsUIViewController: UIViewController {
         contentView.snp.makeConstraints { make in
             make.width.edges.equalToSuperview()
         }
-        imageView.snp.makeConstraints { make in
-//            make.top.equalToSuperview().inset(-90)
-            make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(view.snp.width)
-        }
-        dataOfPublicationLabel.snp.makeConstraints { make in
-            make.top.equalTo(blackView.snp.bottom).offset(edgeInset)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(-20)
             make.leading.trailing.equalToSuperview().inset(edgeInset)
         }
         
-        blackView.snp.makeConstraints { make in
-            make.height.equalTo(70)
+        imageView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(edgeInset)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(imageView.snp.bottom).inset(18)
+            make.height.equalTo(view.snp.width)
         }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(blackView.snp.top).inset(edgeInset)
+       
+        dataOfPublicationLabel.snp.makeConstraints { make in
+            make.top.equalTo(imageView.snp.bottom).offset(edgeInset)
             make.leading.trailing.equalToSuperview().inset(edgeInset)
         }
         
@@ -156,8 +125,4 @@ final class NewsUIViewController: UIViewController {
             make.bottom.equalToSuperview().inset(edgeInset)
         }
     }
-        
-    //MARK: - UICollectionViewDataSource
-    
-    //MARK: - UICollectionViewDelegate
 }
