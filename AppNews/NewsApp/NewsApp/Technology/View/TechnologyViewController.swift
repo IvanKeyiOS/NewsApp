@@ -1,5 +1,5 @@
 //
-//  BusinessViewController.swift
+//  TechnologyViewController.swift
 //  NewsApp
 //
 //  Created by Иван Курганский on 19/01/2025.
@@ -7,12 +7,10 @@
 
 import UIKit
 
-final class BusinessViewController: UIViewController {
+final class TechnologyViewController: UIViewController {
     //MARK: - GUI Variables
-    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
 //        layout.scrollDirection = .horizontal
@@ -26,73 +24,63 @@ final class BusinessViewController: UIViewController {
                                                             width: view.frame.width,
                                                             height: view.frame.height),
                                                             collectionViewLayout: layout)
-        
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .white
         
         return collectionView
     }()
-    //MARK: - Properties
     
+    //MARK: - Properties
+    private var viewModel: TechnologyViewModelProtocol
     
     // MARK: - Life cycle
-//    init(businessViewModel: BusinessViewModelProtocol) {
-//        self.businessViewModel = businessViewModel
-//        super.init(nibName: nil, bundle: nil)
-//        self.setupBusinessViewModel()
-//        
-//        
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    init(viewModel: TechnologyViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        self.setupViewModel()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    
         setupUI()
         collectionView.register(GeneralCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "GeneralCollectionViewCell")
-        
-        collectionView.register(BusinessCollectionViewCell.self,
-                                forCellWithReuseIdentifier: "DetailsCollectionViewCell")
-        
+        collectionView.register(TechnologyCollectionViewCell.self,
+                                forCellWithReuseIdentifier: "TechnologyCollectionViewCell")
+        viewModel.loadData()
     }
-    //MARK: - Methods
     
     //MARK: - Private methods
-    private func setupBusinessViewModel() {
-//        businessViewModel.reloadData = { [weak self] in
-//            self?.collectionView.reloadData()
-//        }
-//        
-//        businessViewModel.reloadCell = { [weak self] row in
-//            self?.collectionView.reloadItems(at: [IndexPath(row: row,
-//                                                            section: 0)])
-//            
-//        }
-//        
-//        businessViewModel.showError = { error in
-//            //TODO: show alert with error
-//            print(error)
-//        }
+    private func setupViewModel() {
+        viewModel.reloadData = { [weak self] in
+            self?.collectionView.reloadData()
+        }
+        
+        viewModel.reloadCell = { [weak self] row in
+            self?.collectionView.reloadItems(at: [IndexPath(row: row,
+                                                            section: 0)])
+        }
+        
+        viewModel.showError = { error in
+            //TODO: show alert with error
+            print(error)
+        }
     }
     
-    
     private func setupUI() {
-
-        view.backgroundColor = .white
+        view.backgroundColor = .cream
         view.addSubview(collectionView)
+        collectionView.backgroundColor = .cream
         
         setupConstraints()
     }
 
     private func setupConstraints() {
-        
-       
-        
         collectionView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(5)
             make.top.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -101,50 +89,50 @@ final class BusinessViewController: UIViewController {
 }
 
 //MARK: - UICollectionViewDataSource
-extension BusinessViewController: UICollectionViewDataSource {
+extension TechnologyViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        2
-        
+        viewModel.numberOfCells > 1 ? 2 : 1
     }
+    
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        section == 0 ? 1 : 15
+        if viewModel.numberOfCells > 1 {
+            return section == 0 ? 1 : viewModel.numberOfCells - 1
+        }
+        return viewModel.numberOfCells
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var cell: UICollectionViewCell?
-        
         if indexPath.section == 0 {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BusinessCollectionViewCell",
-                                                      for: indexPath) as? BusinessCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GeneralCollectionViewCell",
+                                                      for: indexPath) as? GeneralCollectionViewCell
+                    let article = viewModel.getArticle(for: 0)
+            cell?.set(article: article)
+                    print(#function)
+            return cell ?? UICollectionViewCell()
         } else {
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailsCollectionViewCell",
-                                                      for: indexPath) as? BusinessCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TechnologyCollectionViewCell",
+                                                      for: indexPath) as? TechnologyCollectionViewCell
+            let article = viewModel.getArticle(for: indexPath.row + 1)
+            cell?.set(article: article)
+            
+            return cell ?? UICollectionViewCell()
         }
-//        let article = businessViewModel.getArticle(for: indexPath.row)
-//        cell.set(article: article)
-////        print(#function)
-//        return cell
-        
-        return cell ?? UICollectionViewCell()
     }
 }
 //MARK: - UICollectionViewDelegate
-extension BusinessViewController: UICollectionViewDelegate {
+extension TechnologyViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-//        let detailViewController = DetailUIViewController()
-//        navigationController?.pushViewController(detailViewController,
-//                                                 animated: true)
-//        let article = businessViewModel.getArticle(for: indexPath.row)
-//        navigationController?.pushViewController(BusinessUIViewController(businessViewModel: BusinessViewModel(article: businessArticle)),
-//                                                 animated: true)
+        let article = viewModel.getArticle(for: indexPath.section == 0 ? 0 : indexPath.row + 1)
+        navigationController?.pushViewController(NewsViewController(viewModel: NewsViewModel(article: article)),
+                                                 animated: true)
     }
 }
 
 //MARK: - UICollectionViewDelegateFlowLayout
-extension BusinessViewController: UICollectionViewDelegateFlowLayout {
+extension TechnologyViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -155,3 +143,4 @@ extension BusinessViewController: UICollectionViewDelegateFlowLayout {
         return indexPath.section == 0 ? firstSectionSize : secondSectionSize
     }
 }
+

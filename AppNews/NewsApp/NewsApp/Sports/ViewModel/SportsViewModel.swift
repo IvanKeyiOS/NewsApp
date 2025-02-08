@@ -1,27 +1,27 @@
 //
-//  GeneralViewModel.swift
+//  SportsViewModel.swift
 //  NewsApp
 //
-//  Created by Иван Курганский on 25/01/2025.
+//  Created by Иван Курганский on 08/02/2025.
 //
 
 import Foundation
 
-protocol GeneralViewModelProtocol {
+protocol SportsViewModelProtocol {
     var reloadData: (() -> Void)? { get set}
     var showError: ((String) -> Void)? { get set }
     var reloadCell: ((Int) -> Void)? { get set }
     
     var numberOfCells: Int { get }
     
+    func loadData()
     func getArticle(for row: Int) -> ArticleCellViewModel
 }
 
-final class GeneralViewModel: GeneralViewModelProtocol {
+final class SportsViewModel: SportsViewModelProtocol {
     var reloadCell: ((Int) -> Void)?
     var showError: ((String) -> Void)?
     var reloadData: (() -> Void)?
-    
     
     //MARK: - Properties
     var numberOfCells: Int{
@@ -36,17 +36,14 @@ final class GeneralViewModel: GeneralViewModelProtocol {
         }
     }
     
-    init() {
-        loadData()
-    }
-    
     func getArticle(for row: Int) -> ArticleCellViewModel {
         return articles[row]
     }
     
-    private func loadData() {
+    func loadData() {
+        print(#function)
         //TODO: - load Data
-        ApiManager.getNews(from: .general) { [weak self] result in
+        ApiManager.getNews(from: .sports) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let articles):
@@ -61,7 +58,6 @@ final class GeneralViewModel: GeneralViewModelProtocol {
     }
     
     private func loadImage() {
-        //TODO: - get image data
         for (index, article) in articles.enumerated() {
             ApiManager.getImageData(url: article.imageUrl) { [weak self] result in
                 
@@ -77,7 +73,7 @@ final class GeneralViewModel: GeneralViewModelProtocol {
             }
         }
     }
-
+        
     private func convertToCellViewModel(_ articles: [ArticleResponseObject]) -> [ArticleCellViewModel] {
         return articles.map { ArticleCellViewModel(article: $0) }
     }

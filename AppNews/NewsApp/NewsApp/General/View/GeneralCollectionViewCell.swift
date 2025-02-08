@@ -13,18 +13,13 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
     //MARK: - GUI Variables
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        
-        
-        
-        view.contentMode = .scaleAspectFit
-//        view.image = UIImage(named: "image") ?? UIImage.add
-//        view.backgroundColor = .red
+        view.layer.masksToBounds = true
+
         return view
     }()
     
     private lazy var blackView: UIView = {
         let view = UIView()
-        
         view.backgroundColor = .black
         view.alpha = 0.5
         
@@ -33,10 +28,9 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        
         label.text = "Title"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 14)
         
         return label
     }()
@@ -44,7 +38,6 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
     //MARK: - Initializations
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setupUI()
     }
     

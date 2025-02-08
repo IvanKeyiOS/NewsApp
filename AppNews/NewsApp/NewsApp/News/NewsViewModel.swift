@@ -12,16 +12,12 @@ protocol NewsViewModelProtocol {
     var description: String { get }
     var date: String { get }
     var imageData: Data? { get }
-    
 }
 
 final class NewsViewModel: NewsViewModelProtocol {
     var title: String
-    
     var description: String
-    
     var date: String
-    
     var imageData: Data?
     
     init(article: ArticleCellViewModel) {
