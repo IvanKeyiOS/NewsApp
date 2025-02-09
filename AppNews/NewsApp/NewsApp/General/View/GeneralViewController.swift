@@ -15,13 +15,15 @@ final class GeneralViewController: UIViewController {
         searchBar.searchBarStyle = .minimal
         searchBar.backgroundColor = UIColor.cream
         
+        searchBar.delegate = self
+//        searchBar.showsCancelButton = true
+        
         return searchBar
     }()
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let width = (view.frame.width - 15) / 2
-//        let hight = view.frame.height / 8
         let hight = width
         layout.itemSize = CGSize(width: width, height: hight)
         layout.minimumLineSpacing = 5
@@ -57,7 +59,7 @@ final class GeneralViewController: UIViewController {
         setupUI()
         collectionView.register(GeneralCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "GeneralCollectionViewCell")
-        viewModel.loadData()
+        viewModel.loadData(searchText: nil)
         
     }
     //MARK: - Methods
@@ -135,7 +137,33 @@ extension GeneralViewController: UICollectionViewDelegate {
         if indexPath.row == (viewModel.sections[indexPath.section].items.count - 15) {
             
             // load data
-            viewModel.loadData()
+            viewModel.loadData(searchText: searchBar.text)
         }
     }
+}
+
+//MARK: - UISearchBarDelegate
+extension GeneralViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+        viewModel.loadData(searchText: text)
+        searchBar.searchTextField.resignFirstResponder()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar,
+                   textDidChange searchText: String) {
+        if searchText.isEmpty {
+            viewModel.loadData(searchText: nil)
+        }
+    }
+    
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        viewModel.loadData(searchText: nil)
+//    }
+    
+//    func searchBar(_ searchBar: UISearchBar,
+//                   textDidChange searchText: String) {
+//        print(searchBar.text)
+//        print(searchText)
+//    }
 }

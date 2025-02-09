@@ -37,7 +37,9 @@ final class TechnologyViewModel: TechnologyViewModelProtocol {
         //TODO: - load Data
         page += 1
         
-        ApiManager.getNews(from: .business, page: page) { [weak self] result in
+        ApiManager.getNews(from: .business,
+                           page: page,
+                           searchText: "searchText") { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let articles):

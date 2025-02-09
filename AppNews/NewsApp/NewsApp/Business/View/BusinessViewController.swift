@@ -54,7 +54,7 @@ final class BusinessViewController: UIViewController {
         
         collectionView.register(BusinessCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "BusinessCollectionViewCell")
-        viewModel.loadData()
+        viewModel.loadData(searchText: nil)
     }
     //MARK: - Methods
     private func setupViewModel() {
@@ -135,7 +135,7 @@ extension BusinessViewController: UICollectionViewDelegate {
                         forItemAt indexPath: IndexPath) {
         if indexPath.row == (viewModel.sections[1].items.count - 15) {
             // load data
-            viewModel.loadData()
+            viewModel.loadData(searchText: nil)
         }
     }
 }

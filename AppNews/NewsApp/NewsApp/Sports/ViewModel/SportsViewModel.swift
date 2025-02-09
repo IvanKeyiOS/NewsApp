@@ -37,7 +37,9 @@ final class SportsViewModel: SportsViewModelProtocol {
         //TODO: - load Data
         page += 1
         
-        ApiManager.getNews(from: .sports, page: page) { [weak self] result in
+        ApiManager.getNews(from: .sports,
+                           page: page,
+                           searchText: "searchText") { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let articles):
