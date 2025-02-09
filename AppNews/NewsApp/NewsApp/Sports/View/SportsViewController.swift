@@ -81,7 +81,7 @@ final class SportsViewController: UIViewController {
     
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(5)
             make.top.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
