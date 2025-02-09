@@ -14,7 +14,7 @@ final class BusinessViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
-//        layout.scrollDirection = .horizontal
+        //        layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 20,
                                            left: 20,
                                            bottom: 20,
@@ -24,10 +24,11 @@ final class BusinessViewController: UIViewController {
                                                             y: 0,
                                                             width: view.frame.width,
                                                             height: view.frame.height),
-                                                            collectionViewLayout: layout)
+                                              collectionViewLayout: layout)
+        //        collectionView.clipsToBounds = true
         collectionView.dataSource = self
         collectionView.delegate = self
-       
+        
         return collectionView
     }()
     
@@ -78,10 +79,10 @@ final class BusinessViewController: UIViewController {
         
         setupConstraints()
     }
-
+    
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(5)
+            make.leading.trailing.equalToSuperview()
             make.top.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
@@ -90,28 +91,28 @@ final class BusinessViewController: UIViewController {
 //MARK: - UICollectionViewDataSource
 extension BusinessViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        viewModel.articles.count
+        viewModel.sections.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        viewModel.articles[section].items.count
+        viewModel.sections[section].items.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let article = viewModel.articles[indexPath.section].items[indexPath.row] as? ArticleCellViewModel else { return UICollectionViewCell() }
+        guard let article = viewModel.sections[indexPath.section].items[indexPath.row] as? ArticleCellViewModel else { return UICollectionViewCell() }
         
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GeneralCollectionViewCell",
-                                                      for: indexPath) as? GeneralCollectionViewCell
+                                                          for: indexPath) as? GeneralCollectionViewCell
             
             cell?.set(article: article)
-                    print(#function)
+            print(#function)
             return cell ?? UICollectionViewCell()
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BusinessCollectionViewCell",
-                                                      for: indexPath) as? BusinessCollectionViewCell
+                                                          for: indexPath) as? BusinessCollectionViewCell
             cell?.set(article: article)
             
             return cell ?? UICollectionViewCell()
@@ -123,11 +124,19 @@ extension BusinessViewController: UICollectionViewDataSource {
 extension BusinessViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-
-        guard let article = viewModel.articles[indexPath.section].items[indexPath.row] as?
+        guard let article = viewModel.sections[indexPath.section].items[indexPath.row] as?
                 ArticleCellViewModel else { return }
         navigationController?.pushViewController(NewsViewController(viewModel: NewsViewModel(article: article)),
                                                  animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        if indexPath.row == (viewModel.sections[1].items.count - 15) {
+            // load data
+            viewModel.loadData()
+        }
     }
 }
 

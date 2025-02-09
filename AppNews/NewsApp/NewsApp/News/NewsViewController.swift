@@ -23,7 +23,7 @@ final class NewsViewController: UIViewController {
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
-        view.layer.masksToBounds = true
+        view.clipsToBounds = true
         
         return view
     }()

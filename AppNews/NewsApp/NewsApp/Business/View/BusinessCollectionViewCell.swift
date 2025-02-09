@@ -12,8 +12,8 @@ final class BusinessCollectionViewCell: UICollectionViewCell {
     //MARK: - GUI Variables
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        //закомментировать потом
-        view.layer.masksToBounds = true
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
         
         return view
     }()

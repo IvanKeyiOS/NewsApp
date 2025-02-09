@@ -13,7 +13,7 @@ final class TechnologyViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
-//        layout.scrollDirection = .horizontal
+        //        layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 20,
                                            left: 20,
                                            bottom: 20,
@@ -23,7 +23,7 @@ final class TechnologyViewController: UIViewController {
                                                             y: 0,
                                                             width: view.frame.width,
                                                             height: view.frame.height),
-                                                            collectionViewLayout: layout)
+                                              collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .white
@@ -61,9 +61,8 @@ final class TechnologyViewController: UIViewController {
             self?.collectionView.reloadData()
         }
         
-        viewModel.reloadCell = { [weak self] row in
-            self?.collectionView.reloadItems(at: [IndexPath(row: row,
-                                                            section: 0)])
+        viewModel.reloadCell = { [weak self] indexPath in
+            self?.collectionView.reloadItems(at: [indexPath])
         }
         
         viewModel.showError = { error in
@@ -79,10 +78,10 @@ final class TechnologyViewController: UIViewController {
         
         setupConstraints()
     }
-
+    
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(5)
+            make.leading.trailing.equalToSuperview()
             make.top.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
@@ -91,30 +90,28 @@ final class TechnologyViewController: UIViewController {
 //MARK: - UICollectionViewDataSource
 extension TechnologyViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        viewModel.numberOfCells > 1 ? 2 : 1
+        viewModel.sections.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        if viewModel.numberOfCells > 1 {
-            return section == 0 ? 1 : viewModel.numberOfCells - 1
-        }
-        return viewModel.numberOfCells
+        viewModel.sections[section].items.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let article = viewModel.sections[indexPath.section].items[indexPath.row] as? ArticleCellViewModel else { return UICollectionViewCell() }
+        
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GeneralCollectionViewCell",
-                                                      for: indexPath) as? GeneralCollectionViewCell
-                    let article = viewModel.getArticle(for: 0)
+                                                          for: indexPath) as? GeneralCollectionViewCell
+            
             cell?.set(article: article)
-                    print(#function)
+            print(#function)
             return cell ?? UICollectionViewCell()
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TechnologyCollectionViewCell",
-                                                      for: indexPath) as? TechnologyCollectionViewCell
-            let article = viewModel.getArticle(for: indexPath.row + 1)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BusinessCollectionViewCell",
+                                                          for: indexPath) as? BusinessCollectionViewCell
             cell?.set(article: article)
             
             return cell ?? UICollectionViewCell()
@@ -125,9 +122,18 @@ extension TechnologyViewController: UICollectionViewDataSource {
 extension TechnologyViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        let article = viewModel.getArticle(for: indexPath.section == 0 ? 0 : indexPath.row + 1)
+        guard let article = viewModel.sections[indexPath.section].items[indexPath.row] as?
+                ArticleCellViewModel else { return }
         navigationController?.pushViewController(NewsViewController(viewModel: NewsViewModel(article: article)),
                                                  animated: true)
+    }
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        if indexPath.row == (viewModel.sections[1].items.count - 15) {
+            // load data
+            viewModel.loadData()
+        }
     }
 }
 

@@ -20,8 +20,9 @@ final class ApiManager {
     
     //MARK: - Create url path and make request
     static func getNews(from category: Category,
+                        page: Int,
                         completion: @escaping (Result<[ArticleResponseObject], Error>) ->()) {
-        let stringUrl = baseUrl + path + "?category=\(category.rawValue)&language=en" + "&apiKey=\(apiKey)"
+        let stringUrl = baseUrl + path + "?category=\(category.rawValue)&language=en&page=\(page)" + "&apiKey=\(apiKey)"
         print(category)
         guard let url = URL(string: stringUrl) else { return }
         print(stringUrl)

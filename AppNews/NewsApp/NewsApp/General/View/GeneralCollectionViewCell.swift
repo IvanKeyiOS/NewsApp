@@ -13,7 +13,10 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
     //MARK: - GUI Variables
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.layer.masksToBounds = true
+        view.contentMode = .scaleAspectFill
+        
+        view.clipsToBounds = true
+//        view.layer.masksToBounds = true
 
         return view
     }()
@@ -23,6 +26,8 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         view.backgroundColor = .black
         view.alpha = 0.5
         
+        view.clipsToBounds = true
+        
         return view
     }()
     
@@ -30,7 +35,7 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Title"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont.systemFont(ofSize: 20)
         
         return label
     }()
@@ -72,7 +77,7 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         }
         
         blackView.snp.makeConstraints { make in
-            make.height.equalTo(20)
+            make.height.equalTo(40)
             make.leading.trailing.bottom.equalToSuperview()
         }
         

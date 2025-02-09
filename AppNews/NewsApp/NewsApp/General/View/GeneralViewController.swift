@@ -21,7 +21,8 @@ class GeneralViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let width = (view.frame.width - 15) / 2
-        let hight = view.frame.height / 8
+//        let hight = view.frame.height / 8
+        let hight = width
         layout.itemSize = CGSize(width: width, height: hight)
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5

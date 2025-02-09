@@ -13,8 +13,7 @@ final class TechnologyCollectionViewCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        //закомментировать потом
-        view.layer.masksToBounds = true
+        view.clipsToBounds = true
         
         return view
     }()
