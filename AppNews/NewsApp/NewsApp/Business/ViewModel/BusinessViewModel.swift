@@ -17,8 +17,8 @@ final class BusinessViewModel: NewsListViewModel {
                            page: page,
                            searchText: searchText) { [weak self] result in
             self?.handleResult(result)
-            }
         }
+    }
     
     override func convertToCellViewModel(_ articles: [ArticleResponseObject]) {
         var viewModels = articles.map { ArticleCellViewModel(article: $0) }
@@ -31,4 +31,4 @@ final class BusinessViewModel: NewsListViewModel {
             sections[1].items += viewModels
         }
     }
-    }
+}

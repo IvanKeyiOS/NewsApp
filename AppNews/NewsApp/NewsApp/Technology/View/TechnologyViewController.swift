@@ -32,10 +32,10 @@ final class TechnologyViewController: UIViewController {
     }()
     
     //MARK: - Properties
-    private var viewModel: TechnologyViewModelProtocol
+    private var viewModel: NewsListViewModelProtocol
     
     // MARK: - Life cycle
-    init(viewModel: TechnologyViewModelProtocol) {
+    init(viewModel: NewsListViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         self.setupViewModel()
@@ -52,7 +52,7 @@ final class TechnologyViewController: UIViewController {
                                 forCellWithReuseIdentifier: "GeneralCollectionViewCell")
         collectionView.register(TechnologyCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "TechnologyCollectionViewCell")
-        viewModel.loadData()
+        viewModel.loadData(searchText: nil)
     }
     
     //MARK: - Private methods
@@ -132,7 +132,7 @@ extension TechnologyViewController: UICollectionViewDelegate {
                         forItemAt indexPath: IndexPath) {
         if indexPath.row == (viewModel.sections[1].items.count - 15) {
             // load data
-            viewModel.loadData()
+            viewModel.loadData(searchText: nil)
         }
     }
 }

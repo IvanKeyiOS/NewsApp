@@ -14,7 +14,6 @@ final class SportsViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
-        //        layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 20,
                                            left: 20,
                                            bottom: 20,
@@ -31,10 +30,10 @@ final class SportsViewController: UIViewController {
     }()
     
     //MARK: - Properties
-    private var viewModel: SportsViewModelProtocol
+    private var viewModel: NewsListViewModelProtocol
     
     // MARK: - Life cycle
-    init(viewModel: SportsViewModelProtocol) {
+    init(viewModel: NewsListViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         self.setupViewModel()
@@ -52,7 +51,7 @@ final class SportsViewController: UIViewController {
         
         collectionView.register(SportsCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "SportsCollectionViewCell")
-        viewModel.loadData()
+        viewModel.loadData(searchText: nil)
     }
     
     //MARK: - Private methods
@@ -131,7 +130,7 @@ extension SportsViewController: UICollectionViewDelegate {
                         forItemAt indexPath: IndexPath) {
         if indexPath.row == (viewModel.sections[1].items.count - 15) {
             // load data
-            viewModel.loadData()
+            viewModel.loadData(searchText: nil)
         }
     }
 }

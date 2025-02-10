@@ -14,7 +14,6 @@ final class BusinessViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
-        //        layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 20,
                                            left: 20,
                                            bottom: 20,
@@ -25,7 +24,6 @@ final class BusinessViewController: UIViewController {
                                                             width: view.frame.width,
                                                             height: view.frame.height),
                                               collectionViewLayout: layout)
-        //        collectionView.clipsToBounds = true
         collectionView.dataSource = self
         collectionView.delegate = self
         
