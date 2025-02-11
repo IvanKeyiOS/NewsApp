@@ -12,7 +12,7 @@ final class NewsViewController: UIViewController {
     //MARK: - GUI Variables
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
-        view.showsVerticalScrollIndicator = false
+        view.showsVerticalScrollIndicator = true
         view.backgroundColor = .cream
         
         return view
@@ -71,8 +71,7 @@ final class NewsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
-    //MARK: - Methods
-    
+
     //MARK: - Private methods
     private func setupUI() {
         scrollView.addSubview(contentView)
@@ -96,11 +95,13 @@ final class NewsViewController: UIViewController {
     
     private func setupConstraints() {
         scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(view.safeAreaInsets)
         }
         
         contentView.snp.makeConstraints { make in
-            make.width.edges.equalToSuperview()
+            make.width.edges.equalTo(scrollView)
+            make.height.equalTo(contentView)
+            make.leading.trailing.bottom.top.equalTo(scrollView)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -122,7 +123,7 @@ final class NewsViewController: UIViewController {
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(dataOfPublicationLabel.snp.bottom).offset(edgeInset)
             make.leading.trailing.equalToSuperview().inset(edgeInset)
-            make.bottom.equalToSuperview().inset(edgeInset)
+//            make.bottom.equalToSuperview().inset(edgeInset)
         }
     }
 }

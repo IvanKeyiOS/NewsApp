@@ -14,9 +14,7 @@ final class GeneralViewController: UIViewController {
         let searchBar = UISearchBar()
         searchBar.searchBarStyle = .minimal
         searchBar.backgroundColor = UIColor.cream
-        
         searchBar.delegate = self
-//        searchBar.showsCancelButton = true
         
         return searchBar
     }()
@@ -28,7 +26,7 @@ final class GeneralViewController: UIViewController {
         layout.itemSize = CGSize(width: width, height: hight)
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
-//        layout.scrollDirection = .horizontal
+        
         let collectionView = UICollectionView(frame: CGRect(x: 0,
                                                             y: 0,
                                                             width: view.frame.width,
@@ -36,6 +34,7 @@ final class GeneralViewController: UIViewController {
                                                             collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.keyboardDismissMode = .onDrag
         
         return collectionView
     }()
@@ -61,8 +60,15 @@ final class GeneralViewController: UIViewController {
                                 forCellWithReuseIdentifier: "GeneralCollectionViewCell")
         viewModel.loadData(searchText: nil)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     //MARK: - Methods
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
     private func setupViewModel() {
         viewModel.reloadData = { [weak self] in
             self?.collectionView.reloadData()
@@ -74,10 +80,10 @@ final class GeneralViewController: UIViewController {
         
         viewModel.showError = { error in
             //TODO: show alert with error
-            print(error)
+            self.showAlert(title: "Maximum Results Reached", message: "You have requested too many results")
         }
     }
-   
+    
     private func setupUI() {
         view.backgroundColor = .cream
         view.addSubview(searchBar)
@@ -135,7 +141,6 @@ extension GeneralViewController: UICollectionViewDelegate {
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         if indexPath.row == (viewModel.sections[indexPath.section].items.count - 15) {
-            
             // load data
             viewModel.loadData(searchText: searchBar.text)
         }
@@ -157,13 +162,20 @@ extension GeneralViewController: UISearchBarDelegate {
         }
     }
     
-//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//        viewModel.loadData(searchText: nil)
-//    }
-    
-//    func searchBar(_ searchBar: UISearchBar,
-//                   textDidChange searchText: String) {
-//        print(searchBar.text)
-//        print(searchText)
-//    }
+}
+
+extension GeneralViewController {
+    func showAlert(title: String,
+                   message: String,
+                   buttonTitle: String = "OK",
+                   action: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: .alert)
+        let okAction = UIAlertAction(title: buttonTitle, style: .default) { _ in
+            action?()
+        }
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
 }
