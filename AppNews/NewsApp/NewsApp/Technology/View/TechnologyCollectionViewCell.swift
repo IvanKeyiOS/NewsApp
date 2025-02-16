@@ -10,7 +10,7 @@ import SnapKit
 
 final class TechnologyCollectionViewCell: UICollectionViewCell {
     //MARK: - GUI Variables
-    private lazy var imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
@@ -18,7 +18,7 @@ final class TechnologyCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label  = UILabel()
         label.font = .boldSystemFont(ofSize: 16)
         label.textColor = .black
@@ -28,7 +28,7 @@ final class TechnologyCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private lazy var descriptionLabel: UILabel = {
+    private let descriptionLabel: UILabel = {
         let label  = UILabel()
         label.font = .systemFont(ofSize: 14)
         label.textColor = .gray

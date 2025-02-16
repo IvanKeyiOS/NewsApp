@@ -65,7 +65,7 @@ final class BusinessViewController: UIViewController {
         
         viewModel.showError = { error in
             //TODO: show alert with error
-            self.showAlert(title: "Maximum Results Reached", message: "You have requested too many results")
+            AlertManager.showAlert(on: self, title: "Maximum Results Reached", message: "You have requested too many results")
         }
     }
     
@@ -146,21 +146,5 @@ extension BusinessViewController: UICollectionViewDelegateFlowLayout {
         let secondSectionSize = CGSize(width: width, height: 100)
         
         return indexPath.section == 0 ? firstSectionSize : secondSectionSize
-    }
-}
-
-extension BusinessViewController {
-    func showAlert(title: String,
-                   message: String,
-                   buttonTitle: String = "OK",
-                   action: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: title,
-                                      message: message,
-                                      preferredStyle: .alert)
-        let okAction = UIAlertAction(title: buttonTitle, style: .default) { _ in
-            action?()
-        }
-        alert.addAction(okAction)
-        present(alert, animated: true)
     }
 }

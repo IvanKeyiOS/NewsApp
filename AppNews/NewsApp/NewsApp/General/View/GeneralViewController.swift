@@ -56,17 +56,23 @@ final class GeneralViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        tapGesture()
+        
         collectionView.register(GeneralCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "GeneralCollectionViewCell")
         viewModel.loadData(searchText: nil)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
+        
     }
     //MARK: - Methods
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    private func tapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     private func setupViewModel() {
@@ -80,7 +86,7 @@ final class GeneralViewController: UIViewController {
         
         viewModel.showError = { error in
             //TODO: show alert with error
-            self.showAlert(title: "Maximum Results Reached", message: "You have requested too many results")
+            AlertManager.showAlert(on: self, title: "Maximum Results Reached", message: "You have requested too many results")
         }
     }
     
@@ -88,6 +94,7 @@ final class GeneralViewController: UIViewController {
         view.backgroundColor = .cream
         view.addSubview(searchBar)
         view.addSubview(collectionView)
+        
         
         collectionView.backgroundColor = .cream
         setupConstraints()
@@ -162,20 +169,4 @@ extension GeneralViewController: UISearchBarDelegate {
         }
     }
     
-}
-
-extension GeneralViewController {
-    func showAlert(title: String,
-                   message: String,
-                   buttonTitle: String = "OK",
-                   action: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: title,
-                                      message: message,
-                                      preferredStyle: .alert)
-        let okAction = UIAlertAction(title: buttonTitle, style: .default) { _ in
-            action?()
-        }
-        alert.addAction(okAction)
-        present(alert, animated: true)
-    }
 }

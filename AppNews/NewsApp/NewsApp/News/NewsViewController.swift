@@ -10,7 +10,7 @@ import SnapKit
 
 final class NewsViewController: UIViewController {
     //MARK: - GUI Variables
-    private lazy var scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = true
         view.backgroundColor = .cream
@@ -18,9 +18,9 @@ final class NewsViewController: UIViewController {
         return view
     }()
     
-    private lazy var contentView = UIView()
+    private let contentView = UIView()
     
-    private lazy var imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
@@ -28,7 +28,7 @@ final class NewsViewController: UIViewController {
         return view
     }()
         
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -37,7 +37,7 @@ final class NewsViewController: UIViewController {
         return label
     }()
     
-    private lazy var descriptionLabel: UILabel = {
+    private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.italicSystemFont(ofSize: 15)
@@ -46,7 +46,7 @@ final class NewsViewController: UIViewController {
         return label
     }()
 
-    private lazy var dataOfPublicationLabel: UILabel = {
+    private let dataOfPublicationLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15)

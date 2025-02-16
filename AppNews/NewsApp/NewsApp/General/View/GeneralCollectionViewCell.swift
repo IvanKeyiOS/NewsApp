@@ -11,7 +11,7 @@ import SnapKit
 final class GeneralCollectionViewCell: UICollectionViewCell {
     
     //MARK: - GUI Variables
-    private lazy var imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         
@@ -21,7 +21,7 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var blackView: UIView = {
+    private let blackView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
         view.alpha = 0.5
@@ -31,7 +31,7 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Title"
         label.textColor = .white
@@ -39,6 +39,8 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         
         return label
     }()
+    //MARK: - Properties
+//    static let activityIndicator = UIActivityIndicatorView(style: .large)
     
     //MARK: - Initializations
     override init(frame: CGRect) {
@@ -67,6 +69,7 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         addSubview(imageView)
         addSubview(blackView)
         addSubview(titleLabel)
+//        addSubview(GeneralCollectionViewCell.activityIndicator)
         
         setupConstraints()
     }
@@ -75,6 +78,11 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         imageView.snp.makeConstraints { make in
             make.size.edges.equalToSuperview()
         }
+        
+//        GeneralCollectionViewCell.activityIndicator.snp.makeConstraints { make in
+//            make.centerX.equalTo(imageView.snp.centerX)
+//            make.centerY.equalTo(imageView.snp.centerY)
+//        }
         
         blackView.snp.makeConstraints { make in
             make.height.equalTo(40)
