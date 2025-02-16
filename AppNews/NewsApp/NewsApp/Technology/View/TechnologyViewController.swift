@@ -13,7 +13,6 @@ final class TechnologyViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
-        //        layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 20,
                                            left: 20,
                                            bottom: 20,
@@ -26,7 +25,6 @@ final class TechnologyViewController: UIViewController {
                                               collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.backgroundColor = .white
         
         return collectionView
     }()
@@ -67,7 +65,7 @@ final class TechnologyViewController: UIViewController {
         
         viewModel.showError = { error in
             //TODO: show alert with error
-            print(error)
+            AlertManager.showAlert(on: self, title: "Maximum Results Reached", message: "You have requested too many results")
         }
     }
     
@@ -110,8 +108,8 @@ extension TechnologyViewController: UICollectionViewDataSource {
             print(#function)
             return cell ?? UICollectionViewCell()
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BusinessCollectionViewCell",
-                                                          for: indexPath) as? BusinessCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TechnologyCollectionViewCell",
+                                                          for: indexPath) as? TechnologyCollectionViewCell
             cell?.set(article: article)
             
             return cell ?? UICollectionViewCell()
@@ -150,3 +148,18 @@ extension TechnologyViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+extension TechnologyViewController {
+    func showAlert(title: String,
+                   message: String,
+                   buttonTitle: String = "OK",
+                   action: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: .alert)
+        let okAction = UIAlertAction(title: buttonTitle, style: .default) { _ in
+            action?()
+        }
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+}

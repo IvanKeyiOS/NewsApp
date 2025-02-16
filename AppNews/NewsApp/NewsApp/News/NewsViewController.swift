@@ -10,17 +10,17 @@ import SnapKit
 
 final class NewsViewController: UIViewController {
     //MARK: - GUI Variables
-    private lazy var scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let view = UIScrollView()
-        view.showsVerticalScrollIndicator = false
+        view.showsVerticalScrollIndicator = true
         view.backgroundColor = .cream
         
         return view
     }()
     
-    private lazy var contentView = UIView()
+    private let contentView = UIView()
     
-    private lazy var imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
@@ -28,7 +28,7 @@ final class NewsViewController: UIViewController {
         return view
     }()
         
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -37,7 +37,7 @@ final class NewsViewController: UIViewController {
         return label
     }()
     
-    private lazy var descriptionLabel: UILabel = {
+    private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.italicSystemFont(ofSize: 15)
@@ -46,7 +46,7 @@ final class NewsViewController: UIViewController {
         return label
     }()
 
-    private lazy var dataOfPublicationLabel: UILabel = {
+    private let dataOfPublicationLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15)
@@ -71,8 +71,7 @@ final class NewsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
-    //MARK: - Methods
-    
+
     //MARK: - Private methods
     private func setupUI() {
         scrollView.addSubview(contentView)
@@ -96,11 +95,13 @@ final class NewsViewController: UIViewController {
     
     private func setupConstraints() {
         scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(view.safeAreaInsets)
         }
         
         contentView.snp.makeConstraints { make in
-            make.width.edges.equalToSuperview()
+            make.width.edges.equalTo(scrollView)
+            make.height.equalTo(contentView)
+            make.leading.trailing.bottom.top.equalTo(scrollView)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -122,7 +123,7 @@ final class NewsViewController: UIViewController {
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(dataOfPublicationLabel.snp.bottom).offset(edgeInset)
             make.leading.trailing.equalToSuperview().inset(edgeInset)
-            make.bottom.equalToSuperview().inset(edgeInset)
+//            make.bottom.equalToSuperview().inset(edgeInset)
         }
     }
 }

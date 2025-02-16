@@ -9,7 +9,6 @@ import UIKit
 
 final class BusinessViewController: UIViewController {
     //MARK: - GUI Variables
-    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
@@ -66,7 +65,7 @@ final class BusinessViewController: UIViewController {
         
         viewModel.showError = { error in
             //TODO: show alert with error
-            print(error)
+            AlertManager.showAlert(on: self, title: "Maximum Results Reached", message: "You have requested too many results")
         }
     }
     
@@ -106,7 +105,6 @@ extension BusinessViewController: UICollectionViewDataSource {
                                                           for: indexPath) as? GeneralCollectionViewCell
             
             cell?.set(article: article)
-            print(#function)
             return cell ?? UICollectionViewCell()
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "BusinessCollectionViewCell",

@@ -66,7 +66,7 @@ final class SportsViewController: UIViewController {
         
         viewModel.showError = { error in
             //TODO: show alert with error
-            print(error)
+            AlertManager.showAlert(on: self, title: "Maximum Results Reached", message: "You have requested too many results")
         }
     }
     
