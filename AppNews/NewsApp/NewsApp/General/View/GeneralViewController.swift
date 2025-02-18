@@ -95,7 +95,6 @@ final class GeneralViewController: UIViewController {
         view.addSubview(searchBar)
         view.addSubview(collectionView)
         
-        
         collectionView.backgroundColor = .cream
         setupConstraints()
     }
@@ -168,5 +167,4 @@ extension GeneralViewController: UISearchBarDelegate {
             viewModel.loadData(searchText: nil)
         }
     }
-    
 }

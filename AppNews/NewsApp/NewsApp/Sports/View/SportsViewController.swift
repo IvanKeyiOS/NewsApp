@@ -66,7 +66,9 @@ final class SportsViewController: UIViewController {
         
         viewModel.showError = { error in
             //TODO: show alert with error
-            AlertManager.showAlert(on: self, title: "Maximum Results Reached", message: "You have requested too many results")
+            AlertManager.showAlert(on: self,
+                                   title: "Maximum Results Reached",
+                                   message: "You have requested too many results")
         }
     }
     
@@ -115,6 +117,7 @@ extension SportsViewController: UICollectionViewDataSource {
         }
     }
 }
+
 //MARK: - UICollectionViewDelegate
 extension SportsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,

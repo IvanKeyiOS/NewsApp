@@ -42,22 +42,15 @@ final class ApiManager {
     
     static func getImageData(url: String, completion: @escaping (Result<Data, Error>) ->()) {
         guard let url = URL(string: url) else { return }
-        
-//        GeneralCollectionViewCell.activityIndicator.startAnimating()
-        
         let session = URLSession.shared.dataTask(with: url) { data, _, error in
             DispatchQueue.main.async {
                 if let data = data {
                     completion(.success(data))
-//                    GeneralCollectionViewCell.activityIndicator.stopAnimating()
                 }
                 if let error = error {
                     completion(.failure(error))
-//                    GeneralCollectionViewCell.activityIndicator.stopAnimating()
-                    
                 }
             }
-            
         }
         session.resume()
     }
@@ -84,4 +77,3 @@ final class ApiManager {
         }
     }
 }
-

@@ -17,7 +17,6 @@ final class BusinessViewController: UIViewController {
                                            left: 20,
                                            bottom: 20,
                                            right: 20)
-        
         let collectionView = UICollectionView(frame: CGRect(x: 0,
                                                             y: 0,
                                                             width: view.frame.width,
@@ -103,7 +102,6 @@ extension BusinessViewController: UICollectionViewDataSource {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GeneralCollectionViewCell",
                                                           for: indexPath) as? GeneralCollectionViewCell
-            
             cell?.set(article: article)
             return cell ?? UICollectionViewCell()
         } else {
@@ -122,8 +120,7 @@ extension BusinessViewController: UICollectionViewDelegate {
                         didSelectItemAt indexPath: IndexPath) {
         guard let article = viewModel.sections[indexPath.section].items[indexPath.row] as?
                 ArticleCellViewModel else { return }
-        navigationController?.pushViewController(NewsViewController(viewModel: NewsViewModel(article: article)),
-                                                 animated: true)
+        navigationController?.pushViewController(NewsViewController(viewModel: NewsViewModel(article: article)), animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView,

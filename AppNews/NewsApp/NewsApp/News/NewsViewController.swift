@@ -123,7 +123,6 @@ final class NewsViewController: UIViewController {
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(dataOfPublicationLabel.snp.bottom).offset(edgeInset)
             make.leading.trailing.equalToSuperview().inset(edgeInset)
-//            make.bottom.equalToSuperview().inset(edgeInset)
         }
     }
 }
