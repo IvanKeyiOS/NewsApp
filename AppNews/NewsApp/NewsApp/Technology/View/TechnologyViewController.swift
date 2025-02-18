@@ -13,32 +13,34 @@ final class TechnologyViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 5
         layout.minimumInteritemSpacing = 5
+
         layout.sectionInset = UIEdgeInsets(top: 20,
                                            left: 20,
                                            bottom: 20,
                                            right: 20)
-        
+
         let collectionView = UICollectionView(frame: CGRect(x: 0,
                                                             y: 0,
                                                             width: view.frame.width,
                                                             height: view.frame.height),
-                                              collectionViewLayout: layout)
+                                                            collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        
+        collectionView.backgroundColor = .white
+
         return collectionView
     }()
-    
+
     //MARK: - Properties
-    private var viewModel: NewsListViewModelProtocol
-    
+    private var viewModel: TechnologyViewModelProtocol
+
     // MARK: - Life cycle
-    init(viewModel: NewsListViewModelProtocol) {
+    init(viewModel: TechnologyViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         self.setupViewModel()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -50,33 +52,34 @@ final class TechnologyViewController: UIViewController {
                                 forCellWithReuseIdentifier: "GeneralCollectionViewCell")
         collectionView.register(TechnologyCollectionViewCell.self,
                                 forCellWithReuseIdentifier: "TechnologyCollectionViewCell")
-        viewModel.loadData(searchText: nil)
+        viewModel.loadData()
     }
-    
+
     //MARK: - Private methods
     private func setupViewModel() {
         viewModel.reloadData = { [weak self] in
             self?.collectionView.reloadData()
         }
-        
-        viewModel.reloadCell = { [weak self] indexPath in
-            self?.collectionView.reloadItems(at: [indexPath])
+
+        viewModel.reloadCell = { [weak self] row in
+            self?.collectionView.reloadItems(at: [IndexPath(row: row,
+                                                            section: 0)])
         }
-        
+
         viewModel.showError = { error in
             //TODO: show alert with error
-            AlertManager.showAlert(on: self, title: "Maximum Results Reached", message: "You have requested too many results")
+            print(error)
         }
     }
-    
+
     private func setupUI() {
         view.backgroundColor = .cream
         view.addSubview(collectionView)
         collectionView.backgroundColor = .cream
-        
+
         setupConstraints()
     }
-    
+
     private func setupConstraints() {
         collectionView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(5)
@@ -88,30 +91,32 @@ final class TechnologyViewController: UIViewController {
 //MARK: - UICollectionViewDataSource
 extension TechnologyViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        viewModel.sections.count
+        viewModel.numberOfCells > 1 ? 2 : 1
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        viewModel.sections[section].items.count
+        if viewModel.numberOfCells > 1 {
+            return section == 0 ? 1 : viewModel.numberOfCells - 1
+        }
+        return viewModel.numberOfCells
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let article = viewModel.sections[indexPath.section].items[indexPath.row] as? ArticleCellViewModel else { return UICollectionViewCell() }
-        
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GeneralCollectionViewCell",
-                                                          for: indexPath) as? GeneralCollectionViewCell
-            
+                                                      for: indexPath) as? GeneralCollectionViewCell
+                    let article = viewModel.getArticle(for: 0)
             cell?.set(article: article)
-            print(#function)
+                    print(#function)
             return cell ?? UICollectionViewCell()
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TechnologyCollectionViewCell",
-                                                          for: indexPath) as? TechnologyCollectionViewCell
+                                                      for: indexPath) as? TechnologyCollectionViewCell
+            let article = viewModel.getArticle(for: indexPath.row + 1)
             cell?.set(article: article)
-            
+
             return cell ?? UICollectionViewCell()
         }
     }
@@ -120,18 +125,9 @@ extension TechnologyViewController: UICollectionViewDataSource {
 extension TechnologyViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         didSelectItemAt indexPath: IndexPath) {
-        guard let article = viewModel.sections[indexPath.section].items[indexPath.row] as?
-                ArticleCellViewModel else { return }
+        let article = viewModel.getArticle(for: indexPath.section == 0 ? 0 : indexPath.row + 1)
         navigationController?.pushViewController(NewsViewController(viewModel: NewsViewModel(article: article)),
                                                  animated: true)
-    }
-    func collectionView(_ collectionView: UICollectionView,
-                        willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-        if indexPath.row == (viewModel.sections[1].items.count - 15) {
-            // load data
-            viewModel.loadData(searchText: nil)
-        }
     }
 }
 
@@ -143,23 +139,7 @@ extension TechnologyViewController: UICollectionViewDelegateFlowLayout {
         let width = view.frame.width
         let firstSectionSize = CGSize(width: width, height: width)
         let secondSectionSize = CGSize(width: width, height: 100)
-        
-        return indexPath.section == 0 ? firstSectionSize : secondSectionSize
-    }
-}
 
-extension TechnologyViewController {
-    func showAlert(title: String,
-                   message: String,
-                   buttonTitle: String = "OK",
-                   action: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: title,
-                                      message: message,
-                                      preferredStyle: .alert)
-        let okAction = UIAlertAction(title: buttonTitle, style: .default) { _ in
-            action?()
-        }
-        alert.addAction(okAction)
-        present(alert, animated: true)
+        return indexPath.section == 0 ? firstSectionSize : secondSectionSize
     }
 }

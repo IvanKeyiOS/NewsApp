@@ -4,40 +4,42 @@
 //
 //  Created by Иван Курганский on 23/01/2025.
 //
-
 import UIKit
 import SnapKit
 
 final class NewsViewController: UIViewController {
     //MARK: - GUI Variables
-    private let scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
-        view.showsVerticalScrollIndicator = true
+
+        view.showsVerticalScrollIndicator = false
         view.backgroundColor = .cream
-        
+
         return view
     }()
     
-    private let contentView = UIView()
-    
-    private let imageView: UIImageView = {
+    private lazy var contentView = UIView()
+
+    private lazy var imageView: UIImageView = {
         let view = UIImageView()
+
         view.contentMode = .scaleAspectFit
-        view.clipsToBounds = true
-        
+
         return view
     }()
+
         
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
+
         label.textColor = .black
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.numberOfLines = 0
-        
+
         return label
     }()
     
-    private let descriptionLabel: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.italicSystemFont(ofSize: 15)
@@ -46,24 +48,28 @@ final class NewsViewController: UIViewController {
         return label
     }()
 
-    private let dataOfPublicationLabel: UILabel = {
+    private lazy var dataOfPublicationLabel: UILabel = {
         let label = UILabel()
+
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 15)
-        
+
         return label
     }()
-    
+
     //MARK: - Properties
     private let edgeInset = 10
     private let viewModel: NewsViewModelProtocol
-    
+
     // MARK: - Life cycle
     init(viewModel: NewsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+//        self.setupViewModel()
+
+
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -71,7 +77,8 @@ final class NewsViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
-
+    //MARK: - Methods
+    
     //MARK: - Private methods
     private func setupUI() {
         scrollView.addSubview(contentView)
@@ -90,39 +97,40 @@ final class NewsViewController: UIViewController {
         } else {
             imageView.image = UIImage(named: "image")
         }
+
         setupConstraints()
     }
-    
+
     private func setupConstraints() {
         scrollView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaInsets)
+            make.edges.equalToSuperview()
         }
         
         contentView.snp.makeConstraints { make in
-            make.width.edges.equalTo(scrollView)
-            make.height.equalTo(contentView)
-            make.leading.trailing.bottom.top.equalTo(scrollView)
+            make.width.edges.equalToSuperview()
         }
-        
+
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(-20)
             make.leading.trailing.equalToSuperview().inset(edgeInset)
         }
-        
+
         imageView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(edgeInset)
             make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(imageView.snp.bottom).inset(18)
             make.height.equalTo(view.snp.width)
         }
-       
+
         dataOfPublicationLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(edgeInset)
             make.leading.trailing.equalToSuperview().inset(edgeInset)
         }
-        
+
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(dataOfPublicationLabel.snp.bottom).offset(edgeInset)
             make.leading.trailing.equalToSuperview().inset(edgeInset)
+            make.bottom.equalToSuperview().inset(edgeInset)
         }
     }
 }

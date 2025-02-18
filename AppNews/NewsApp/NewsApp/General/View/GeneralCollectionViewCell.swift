@@ -4,48 +4,45 @@
 //
 //  Created by Иван Курганский on 22/01/2025.
 //
-
 import UIKit
 import SnapKit
-
 final class GeneralCollectionViewCell: UICollectionViewCell {
     
     //MARK: - GUI Variables
-    private let imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
-        
-        view.clipsToBounds = true
-//        view.layer.masksToBounds = true
+
+        view.layer.masksToBounds = true
 
         return view
     }()
-    
-    private let blackView: UIView = {
+
+    private lazy var blackView: UIView = {
         let view = UIView()
+
         view.backgroundColor = .black
         view.alpha = 0.5
-        
-        view.clipsToBounds = true
-        
+
         return view
     }()
-    
-    private let titleLabel: UILabel = {
+
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
+
         label.text = "Title"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 20)
-        
+        label.font = UIFont.systemFont(ofSize: 16)
+
         return label
     }()
 
     //MARK: - Initializations
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -77,7 +74,7 @@ final class GeneralCollectionViewCell: UICollectionViewCell {
         }
         
         blackView.snp.makeConstraints { make in
-            make.height.equalTo(40)
+            make.height.equalTo(20)
             make.leading.trailing.bottom.equalToSuperview()
         }
         

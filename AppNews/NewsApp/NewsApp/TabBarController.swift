@@ -11,10 +11,11 @@ final class TabBarController: UITabBarController {
     //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.tintColor = .black
         setupViewController()
     }
-    
+
     //MARK: - Private methods
     private func setupViewController() {
         viewControllers = [setupNavigationController(rootViewController: GeneralViewController(viewModel: GeneralViewModel()),
@@ -30,7 +31,7 @@ final class TabBarController: UITabBarController {
                                                      title: "Sports",
                                                      image: UIImage(systemName: "sportscourt") ?? UIImage.add)]
     }
-    
+
     private func setupNavigationController(rootViewController: UIViewController,
                                            title: String,
                                            image: UIImage) -> UINavigationController {
@@ -39,7 +40,7 @@ final class TabBarController: UITabBarController {
         navigationController.tabBarItem.image = image
         rootViewController.navigationItem.title = title
         navigationController.navigationBar.prefersLargeTitles = true
-        
+
         return navigationController
     }
     

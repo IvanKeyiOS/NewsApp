@@ -4,9 +4,7 @@
 //
 //  Created by Иван Курганский on 26/01/2025.
 //
-
 import Foundation
-
 protocol NewsViewModelProtocol {
     var title: String { get }
     var description: String { get }
@@ -19,7 +17,7 @@ final class NewsViewModel: NewsViewModelProtocol {
     var description: String
     var date: String
     var imageData: Data?
-    
+
     init(article: ArticleCellViewModel) {
         title = article.title
         description = article.description
